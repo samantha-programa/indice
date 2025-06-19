@@ -1,0 +1,528 @@
+/* General Body Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    background-color: #f4f4f4;
+    color: #333;
+    overflow-x: hidden; /* Evita el scroll horizontal */
+}
+
+/* Header Styles */
+header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+header .logo img {
+    height: 60px;
+    transition: transform 0.3s ease; /* Transición para el efecto pulse */
+}
+
+/* Pulse Effect for Logo */
+.pulse-effect {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+header nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+header nav ul li {
+    margin-left: 25px;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1em;
+    transition: color 0.3s ease, transform 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+header nav ul li a i {
+    margin-right: 8px;
+}
+
+header nav ul li a:hover {
+    color: #3498db;
+    transform: translateY(-3px); /* Efecto hover para links */
+}
+
+/* Mobile Nav Toggle */
+.nav-toggle {
+    display: none;
+    font-size: 1.8em;
+    cursor: pointer;
+}
+
+/* Hero Section - Subpage */
+.hero-subpage {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('imagenes/hero-background.jpg') no-repeat center center/cover;
+    color: white;
+    text-align: center;
+    padding: 100px 20px;
+    height: 400px; /* Altura fija para el hero */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Para animaciones de fondo */
+}
+
+.hero-content-subpage h1 {
+    font-size: 3.5em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero-content-subpage p {
+    font-size: 1.5em;
+    max-width: 800px;
+    margin: 0 auto;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+/* Content Sections */
+.content-section {
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: left;
+}
+
+.content-section h2 {
+    font-size: 2.8em;
+    color: #2c3e50;
+    margin-bottom: 40px;
+    text-align: center;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.content-section h2::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: 0;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background-color: #3498db;
+    border-radius: 2px;
+}
+
+/* Story Grid */
+.story-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    margin-top: 50px;
+}
+
+.story-item {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.story-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.story-item img {
+    max-width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.story-item h3 {
+    font-size: 1.8em;
+    color: #3498db;
+    margin-bottom: 15px;
+}
+
+.story-item p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    color: #555;
+}
+
+/* Highlight Section (Mision/Vision) */
+.highlight-section {
+    background-color: #eaf2f8; /* Un fondo ligeramente diferente para destacar */
+    border-top: 1px solid #dcdcdc;
+    border-bottom: 1px solid #dcdcdc;
+}
+
+.mission-vision-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 40px;
+    margin-top: 50px;
+}
+
+.mision-card,
+.vision-card {
+    background-color: white;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.mision-card:hover,
+.vision-card:hover {
+    transform: translateY(-12px) scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.mision-card .icon-large,
+.vision-card .icon-large {
+    font-size: 4em;
+    color: #3498db;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.mision-card:hover .icon-large,
+.vision-card:hover .icon-large {
+    transform: scale(1.1);
+}
+
+.mision-card h3,
+.vision-card h3 {
+    font-size: 2.2em;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.mision-card p,
+.vision-card p {
+    font-size: 1.1em;
+    line-height: 1.7;
+    color: #555;
+}
+
+/* Values Grid */
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.value-item {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.value-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.value-item .icon-large {
+    font-size: 3.5em;
+    color: #3498db;
+    margin-bottom: 15px;
+}
+
+.value-item h3 {
+    font-size: 1.6em;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.value-item p {
+    font-size: 1em;
+    line-height: 1.5;
+    color: #666;
+}
+
+.value-item p strong {
+    color: #2c3e50;
+}
+
+/* Horizontal Rule */
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 80px auto;
+    width: 60%;
+}
+
+/* Buttons */
+.buttons {
+    text-align: center;
+    margin: 60px 0;
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* Espacio entre botones */
+}
+
+.btn-primary, .exit {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
+.exit {
+    background-color: #e74c3c;
+    color: white;
+}
+
+.exit:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+.btn-primary i, .exit i {
+    margin-right: 10px;
+}
+
+/* Glow Effect for Exit Button */
+.glow-effect {
+    box-shadow: 0 0 5px rgba(231, 76, 60, 0.5);
+    animation: glow-animation 1.5s infinite alternate;
+}
+
+@keyframes glow-animation {
+    0% {
+        box-shadow: 0 0 5px rgba(231, 76, 60, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(231, 76, 60, 0.8), 0 0 30px rgba(231, 76, 60, 0.6);
+    }
+}
+
+/* Footer Styles */
+footer {
+    background-color: #2c3e50;
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+    margin-top: 50px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+footer p {
+    margin: 0;
+    font-size: 0.9em;
+}
+
+.social-icons {
+    margin-top: 15px;
+}
+
+.social-icons a {
+    color: white;
+    font-size: 1.5em;
+    margin: 0 10px;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #3498db;
+    transform: scale(1.2);
+}
+
+/* --- Nuevas Animaciones y Ajustes CSS --- */
+
+/* Animación de entrada para elementos al hacer scroll */
+/* Por defecto, los elementos con esta clase estarán ocultos */
+.animated-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+/* Cuando la clase 'is-visible' es añadida por JS, se animan */
+.animated-on-scroll.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Efecto de Paralaje Suave en el Hero Section */
+.hero-subpage {
+    background-attachment: fixed; /* Esto es clave para el paralaje */
+}
+
+/* Hover effect for cards */
+.card-hover-effect {
+    position: relative;
+    overflow: hidden;
+}
+
+.card-hover-effect::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(52, 152, 219, 0.2) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none; /* Asegura que el pseudo-elemento no interfiera con los eventos de ratón */
+}
+
+.card-hover-effect:hover::before {
+    opacity: 1;
+}
+
+/* Animación para el menú móvil al abrir/cerrar */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    header {
+        padding: 1rem 1.5rem;
+    }
+
+    header nav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 70%;
+        height: 100%;
+        background-color: #2c3e50;
+        flex-direction: column;
+        justify-content: flex-start;
+        padding-top: 80px;
+        transform: translateX(100%);
+        transition: transform 0.4s ease-in-out;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+        z-index: 999;
+    }
+
+    header nav.active {
+        transform: translateX(0);
+    }
+
+    header nav ul {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    header nav ul li {
+        margin: 15px 0;
+        text-align: center;
+    }
+
+    header nav ul li a {
+        padding: 10px 0;
+        display: block;
+        font-size: 1.2em;
+    }
+
+    .nav-toggle {
+        display: block;
+        z-index: 1001; /* Asegura que el botón esté por encima del menú */
+    }
+
+    .hero-content-subpage h1 {
+        font-size: 2.5em;
+    }
+
+    .hero-content-subpage p {
+        font-size: 1.2em;
+    }
+
+    .content-section {
+        padding: 40px 15px;
+    }
+
+    .content-section h2 {
+        font-size: 2em;
+    }
+
+    .story-grid, .mission-vision-grid, .values-grid {
+        grid-template-columns: 1fr; /* Una columna en móviles */
+    }
+
+    .story-item, .mision-card, .vision-card, .value-item {
+        padding: 25px;
+    }
+
+    .buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .btn-primary, .exit {
+        width: 80%;
+        margin: 0 auto;
+    }
+}

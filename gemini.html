@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Personalizado</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        .chat-container {
+            width: 400px;
+            height: 600px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .chat-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2em;
+        }
+        .chat-box {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            border-bottom: 1px solid #eee;
+        }
+        .message {
+            margin-bottom: 10px;
+            display: flex;
+        }
+        .message.user {
+            justify-content: flex-end;
+        }
+        .message.bot {
+            justify-content: flex-start;
+        }
+        .message-bubble {
+            padding: 10px 15px;
+            border-radius: 20px;
+            max-width: 70%;
+            word-wrap: break-word;
+        }
+        .message.user .message-bubble {
+            background-color: #dcf8c6;
+            color: #333;
+        }
+        .message.bot .message-bubble {
+            background-color: #e0e0e0;
+            color: #333;
+        }
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #eee;
+        }
+        .chat-input input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            margin-right: 10px;
+            outline: none;
+        }
+        .chat-input button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            outline: none;
+        }
+        .chat-input button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            Chatbot de Conocimiento
+        </div>
+        <div class="chat-box" id="chat-box">
+            </div>
+        <div class="chat-input">
+            <input type="text" id="user-input" placeholder="Escribe tu mensaje...">
+            <button id="send-button">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+
+        let userName = '';
+        let currentTopic = '';
+        let questionCount = 0;
+        let askedQuestions = [];
+
+        const topics = {
+            "FUTBOL": [
+                { q: "¿Quién ganó la última Copa del Mundo de fútbol?", a: "Argentina ganó la última Copa del Mundo en 2022." },
+                { q: "¿Cuál es el club con más Champions League?", a: "El Real Madrid es el club con más Champions League." },
+                { q: "¿Cuántos jugadores tiene un equipo de fútbol en la cancha?", a: "Un equipo de fútbol tiene 11 jugadores en la cancha." },
+                { q: "¿Quién es considerado el mejor futbolista de la historia por muchos?", a: "Lionel Messi y Cristiano Ronaldo son frecuentemente mencionados, pero la opinión es subjetiva." },
+                { q: "¿Cada cuánto tiempo se celebra la Copa del Mundo?", a: "La Copa del Mundo se celebra cada 4 años." }
+            ],
+            "REDES SOCIALES": [
+                { q: "¿Cuál fue la primera red social popular?", a: "Six Degrees es considerada una de las primeras redes sociales, lanzada en 1997." },
+                { q: "¿Cuál es la red social con más usuarios activos?", a: "Facebook es actualmente la red social con más usuarios activos, aunque TikTok y YouTube también tienen cifras altísimas." },
+                { q: "¿Qué significa 'hashtag'?", a: "Un hashtag es una palabra o frase precedida por el símbolo #, utilizada para identificar mensajes sobre un tema específico." },
+                { q: "¿Qué red social es conocida por sus videos cortos?", a: "TikTok es conocida por sus videos cortos." },
+                { q: "¿Qué es el 'engagement' en redes sociales?", a: "El engagement se refiere al nivel de interacción que tiene una audiencia con el contenido de una marca o perfil." }
+            ],
+            "ALGEBRA": [
+                { q: "¿Qué es una variable en álgebra?", a: "Una variable es un símbolo (generalmente una letra) que representa un valor desconocido o que puede cambiar." },
+                { q: "¿Qué es una ecuación lineal?", a: "Una ecuación lineal es una ecuación en la que el grado más alto de la variable es 1, y su gráfica es una línea recta." },
+                { q: "¿Qué es 'factorizar' en álgebra?", a: "Factorizar es el proceso de descomponer una expresión algebraica en un producto de dos o más expresiones." },
+                { q: "¿Qué es el teorema de Pitágoras?", a: "El teorema de Pitágoras establece que en un triángulo rectángulo, el cuadrado de la hipotenusa es igual a la suma de los cuadrados de los catetos ($a^2 + b^2 = c^2$)." },
+                { q: "¿Qué es un polinomio?", a: "Un polinomio es una expresión algebraica compuesta por la suma de términos, donde cada término es el producto de un coeficiente y una o más variables elevadas a potencias enteras no negativas." }
+            ],
+            "MAQUILLAJE": [
+                { q: "¿Qué es una base de maquillaje?", a: "Una base de maquillaje es un producto que se aplica en el rostro para unificar el tono de la piel y crear un lienzo uniforme para el resto del maquillaje." },
+                { q: "¿Cuál es la diferencia entre corrector y base?", a: "La base se aplica en todo el rostro para unificar el tono, mientras que el corrector se usa para cubrir imperfecciones específicas como ojeras o manchas." },
+                { q: "¿Qué son las brochas de maquillaje y para qué sirven?", a: "Las brochas de maquillaje son herramientas con cerdas para aplicar y difuminar productos de maquillaje de manera precisa." },
+                { q: "¿Qué es el 'contouring'?", a: "El contouring es una técnica de maquillaje que utiliza tonos claros y oscuros para definir y realzar las facciones del rostro." },
+                { q: "¿Qué es un 'primer' de maquillaje?", a: "Un primer es un producto que se aplica antes de la base para preparar la piel, prolongar la duración del maquillaje y mejorar su aplicación." }
+            ],
+            "ALIMENTACION": [
+                { q: "¿Qué son los macronutrientes?", a: "Los macronutrientes son los nutrientes que el cuerpo necesita en grandes cantidades para obtener energía: carbohidratos, proteínas y grasas." },
+                { q: "¿Cuál es la importancia de la fibra en la dieta?", a: "La fibra es importante para la salud digestiva, ayuda a regular los niveles de azúcar en sangre y puede contribuir a la sensación de saciedad." },
+                { q: "¿Qué son las proteínas y por qué son importantes?", a: "Las proteínas son macromoléculas esenciales para la construcción y reparación de tejidos, la producción de enzimas y hormonas, y el mantenimiento de la función inmunológica." },
+                { q: "¿Cuánta agua se recomienda beber al día?", a: "Generalmente se recomienda beber al menos 2 litros (8 vasos) de agua al día, aunque puede variar según la actividad física y el clima." },
+                { q: "¿Qué es una dieta equilibrada?", a: "Una dieta equilibrada es aquella que proporciona todos los nutrientes necesarios en las proporciones adecuadas para mantener la salud y el bienestar." }
+            ],
+            "GYM": [
+                { q: "¿Qué es el entrenamiento de fuerza?", a: "El entrenamiento de fuerza implica el uso de resistencia para inducir la contracción muscular, construyendo fuerza, tamaño de los músculos y resistencia anaeróbica." },
+                { q: "¿Qué son las repeticiones (reps) y las series (sets) en el gimnasio?", a: "Una repetición es una ejecución completa de un ejercicio; una serie es un grupo de repeticiones sin descanso intermedio." },
+                { q: "¿Cuál es la importancia del calentamiento antes de entrenar?", a: "El calentamiento prepara el cuerpo para el ejercicio aumentando el flujo sanguíneo y la flexibilidad, reduciendo el riesgo de lesiones." },
+                { q: "¿Qué es el ejercicio cardiovascular?", a: "El ejercicio cardiovascular (o aeróbico) es cualquier actividad que eleva el ritmo cardíaco y respiratorio, mejorando la salud del corazón y los pulmones." },
+                { q: "¿Qué es el DOMS (Delayed Onset Muscle Soreness)?", a: "El DOMS es el dolor muscular que aparece horas o días después de un ejercicio intenso, causado por micro-desgarros en las fibras musculares." }
+            ]
+        };
+
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', sender);
+            const messageBubble = document.createElement('div');
+            messageBubble.classList.add('message-bubble');
+            messageBubble.textContent = text;
+            messageDiv.appendChild(messageBubble);
+            chatBox.appendChild(messageDiv);
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll al final
+        }
+
+        function askQuestion() {
+            if (questionCount < 10 && currentTopic) {
+                const availableQuestions = topics[currentTopic].filter(q => !askedQuestions.includes(q.q));
+                if (availableQuestions.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+                    const question = availableQuestions[randomIndex];
+                    addMessage(`Bot: ${question.q}`, 'bot');
+                    askedQuestions.push(question.q); // Marcar como preguntada
+                    questionCount++;
+                } else {
+                    addMessage('Bot: ¡Hemos terminado con las preguntas de este tema! ¿Te gustaría elegir otro tema?', 'bot');
+                    currentTopic = '';
+                    questionCount = 0;
+                    askedQuestions = [];
+                }
+            } else if (questionCount >= 10) {
+                 addMessage(`Bot: ¡Genial, ${userName}! Hemos completado las 10 preguntas. ¿Te gustaría elegir otro tema? Puedes elegir entre: ${Object.keys(topics).join(', ')}.`, 'bot');
+                 currentTopic = '';
+                 questionCount = 0;
+                 askedQuestions = [];
+            } else {
+                addMessage(`Bot: ¡Hola! Soy tu chatbot de conocimiento. ¿Cuál es tu nombre?`, 'bot');
+            }
+        }
+
+        sendButton.addEventListener('click', () => {
+            const message = userInput.value.trim();
+            if (message) {
+                addMessage(`Tú: ${message}`, 'user');
+                userInput.value = '';
+                processMessage(message);
+            }
+        });
+
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+
+        function processMessage(message) {
+            if (!userName) {
+                userName = message;
+                addMessage(`Bot: ¡Hola, ${userName}! ¡Es un placer conocerte! ¿Sobre qué tema te gustaría aprender hoy? Puedes elegir entre: ${Object.keys(topics).join(', ')}.`, 'bot');
+            } else if (!currentTopic) {
+                const chosenTopic = message.toUpperCase();
+                if (topics[chosenTopic]) {
+                    currentTopic = chosenTopic;
+                    questionCount = 0;
+                    askedQuestions = []; // Reiniciar preguntas para el nuevo tema
+                    addMessage(`Bot: ¡Excelente elección, ${userName}! Empecemos con 10 preguntas sobre ${currentTopic}.`, 'bot');
+                    setTimeout(askQuestion, 1000); // Dar un pequeño retraso
+                } else {
+                    addMessage(`Bot: Lo siento, "${message}" no es un tema válido. Por favor, elige uno de los siguientes: ${Object.keys(topics).join(', ')}.`, 'bot');
+                }
+            } else {
+                // Aquí podrías intentar verificar la respuesta del usuario si quisieras
+                // Por simplicidad, este chatbot solo hace la siguiente pregunta.
+                // Para una verificación, necesitarías comparar 'message' con la 'a' de la última pregunta.
+                addMessage(`Bot: Buena respuesta.`, 'bot'); // O "Intentemos con la siguiente pregunta."
+                setTimeout(askQuestion, 1000); // Continuar con la siguiente pregunta
+            }
+        }
+
+        // Iniciar el chat
+        askQuestion();
+    </script>
+</body>
+</html>
